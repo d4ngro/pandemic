@@ -20,15 +20,15 @@ Als Build-Tool ist Gradle im Einsatz. Finde ich schicker als Maven, ist aber Ges
 
 ## Auf die Applikation zugreifen
 
-Auf die HTTP Methode folgen die URL und der request-body in spitzen Klammern.
+Auf die HTTP Methode folgen die URL und der request-body in geschweiften Klammern.
 
 1. GET http://localhost:8080/api/game/ -> Liefert alle Spiele.
 
-2. POST http://localhost:8080/api/player/NAME <> -> Liefert neuen Spieler mit Namen "NAME".
+2. POST http://localhost:8080/api/player/NAME {} -> Liefert neuen Spieler mit Namen "NAME".
 
-3. POST http://localhost:8080/api/game/ <Spieler JSON> -> Liefert neues Spiel mit dem im JSON request-body übergebenen Spieler.
+3. POST http://localhost:8080/api/game/ {Spieler JSON} -> Liefert neues Spiel mit dem im JSON request-body übergebenen Spieler.
 
-4. POST http://localhost:8080/api/game/GAME_ID/join <Spieler JSON> -> Liefert Spiel mit ID "GAME_ID" und hinzugefügtem im JSON request-body übergebenen Spieler.
+4. POST http://localhost:8080/api/game/GAME_ID/join {Spieler JSON} -> Liefert Spiel mit ID "GAME_ID" und hinzugefügtem im JSON request-body übergebenen Spieler.
 
 Die drei POST requests sind nicht idempotent, daher sind sie POST und nicht PUT.
 
