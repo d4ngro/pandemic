@@ -1,0 +1,46 @@
+plugins {
+  id 'java'
+  id 'eclipse'
+  id 'org.springframework.boot' version '1.5.4.RELEASE'
+}
+
+jar {
+  baseName = 'pandemic'
+  version = '0.1.0'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+  jcenter()
+  maven {
+  	url "https://s3.eu-central-1.amazonaws.com/dynamodb-local-frankfurt/release"
+  }
+}
+
+configurations {
+  compile.exclude module: 'spring-boot-starter-tomcat'
+}
+
+dependencies {
+  compileOnly("org.projectlombok:lombok:1.16.18")
+  compile("org.springframework.boot:spring-boot-starter-web")
+  compile("org.springframework.boot:spring-boot-starter-jetty")
+  compile("com.github.derjust:spring-data-dynamodb:4.5.0")
+  compile("com.amazonaws:DynamoDBLocal:[1.11,2.0)")
+  testCompile("org.springframework.boot:spring-boot-starter-test")
+  testCompile("junit:junit:4.12")
+}
+
+task copyJar(type: Copy) {
+  from 'build/libs/pandemic-0.1.0.jar'
+  into 'docker'
+}
+
+task dockerize {
+  println "Dockerizing the application..."
+}
+
+dockerize.dependsOn build
+dockerize.dependsOn copyJar
