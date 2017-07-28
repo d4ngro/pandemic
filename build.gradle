@@ -30,7 +30,6 @@ dependencies {
   compile("com.github.derjust:spring-data-dynamodb:4.5.0")
   compile("com.amazonaws:DynamoDBLocal:[1.11,2.0)")
   testCompile("org.springframework.boot:spring-boot-starter-test")
-  testCompile("junit:junit:4.12")
 }
 
 task copyJar(type: Copy) {
