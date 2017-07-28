@@ -41,5 +41,8 @@ public class Game {
 
 	public void addPlayer(Player player) {
 		players.add(player);
+		if (players.size() == 4) {
+			state = State.RUNNING;
+		}
 	}
 }

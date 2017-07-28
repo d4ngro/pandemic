@@ -2,7 +2,6 @@ package de.tuberlin.cloudcomputing.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +21,11 @@ public class GameController {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@Autowired
 	private GameRepository gameRepo;
+
+	public GameController(GameRepository gameRepo) {
+		this.gameRepo = gameRepo;
+	}
 
 	@CrossOrigin
 	@PostMapping(value = "/")
@@ -41,12 +43,11 @@ public class GameController {
 		Game game = gameRepo.findOne(id);
 		if (game != null) {
 			game.addPlayer(player);
+			gameRepo.save(game);
 			logger.info("player {} added to game {}", player.getId(), id);
-			if (game.getPlayers().size() == 4) {
-				game.setState(State.RUNNING);
+			if (game.getState().equals(State.RUNNING)) {
 				logger.info("game {} started", id);
 			}
-			gameRepo.save(game);
 		}
 		return game;
 	}
