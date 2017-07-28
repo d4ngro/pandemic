@@ -36,9 +36,11 @@ Die drei POST requests sind nicht idempotent, daher sind sie POST und nicht PUT.
 
 Wie an den packages zu sehen, trennt die Implementierung Controller, Modell und Datenbankzugriff vernünftig voneinander.
 
-Die Controller implementieren die Businesslogik. Außer dem Anlegen von Spielen und dem Hinzufügen von Spielern ist der Start des Spiels, wenn vier Spieler beteiligt sind, umgesetzt. Das soll mal exemplarisch reichen.
+Die Controller nehmen die API Aurufe entgegen und leiten sie an das Modell weiter.
 
 Das Modell besteht aus zwei Klassen. Interessant ist nur die "Game" Klasse, da sie die einzige persistente ist und mit den entsprechenden Annotations versehen ist. Das Object Mapping passiert automatisch. Die Modellklassen nutzen zudem die "lombok" Bibliothek zur Vermeidung von Boilerplate Code.
+
+Außer dem Anlegen von Spielen und dem Hinzufügen von Spielern ist der Start des Spiels, wenn vier Spieler beteiligt sind, umgesetzt. Das soll mal exemplarisch reichen.
 
 Die Schnittstelle zur Datenbank sind in Spring die Repository Interfaces, hier nur das "GameRepository". Es erweitert das "CrudRepository" Interface von Spring. Damit stehen z. B. die im Controller benutzten Methoden "save", "findAll" und "findOne" automatisch zur Verfügung.
 
