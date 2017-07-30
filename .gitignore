@@ -5,3 +5,4 @@
 bin/
 build/
 shared-local-instance.db
+docker/pandemic-0.1.0.jar
