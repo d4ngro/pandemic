@@ -36,29 +36,25 @@ public class DynamoDBConfig {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Bean
-	public AmazonDynamoDB amazonDynamoDB() {
+	public AmazonDynamoDB amazonDynamoDB() throws Exception {
 		AmazonDynamoDB client = null;
-		try {
-			client = AmazonDynamoDBClientBuilder.standard().withEndpointConfiguration(
-					new AwsClientBuilder.EndpointConfiguration(serviceEndpoint, signingRegion)).build();
-			createPandemicTableIfNotExist(client);
-		} catch (Exception e) {
-			logger.error("couldn't start DynamoDB: {}", e.getMessage());
-		}
+		client = AmazonDynamoDBClientBuilder.standard()
+				.withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(serviceEndpoint, signingRegion))
+				.build();
+		logger.info("Connected to local DynamoDB");
+		createPandemicTableIfNotExists(client);
 		return client;
 	}
 
-	private void createPandemicTableIfNotExist(AmazonDynamoDB client) {
+	private void createPandemicTableIfNotExists(AmazonDynamoDB client) throws InterruptedException {
 		DynamoDB dynamoDB = new DynamoDB(client);
 		try {
 			dynamoDB.createTable(PANDEMIC_TABLE, Arrays.asList(new KeySchemaElement(GAME_ID, KeyType.HASH)),
 					Arrays.asList(new AttributeDefinition(GAME_ID, ScalarAttributeType.S)),
 					new ProvisionedThroughput(10L, 10L)).waitForActive();
-			logger.info("pandemic table created");
+			logger.info("Created pandemic table");
 		} catch (ResourceInUseException e) {
-			logger.info("pandemic table already exists");
-		} catch (InterruptedException e) {
-			logger.error("pandemic table couldn't be created: {}", e.getMessage());
+			logger.info("Didn't create pandemic table: table already exists");
 		}
 	}
 }
