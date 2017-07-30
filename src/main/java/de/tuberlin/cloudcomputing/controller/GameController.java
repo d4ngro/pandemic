@@ -1,7 +1,5 @@
 package de.tuberlin.cloudcomputing.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,50 +9,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.tuberlin.cloudcomputing.model.Game;
-import de.tuberlin.cloudcomputing.model.Game.State;
 import de.tuberlin.cloudcomputing.model.Player;
-import de.tuberlin.cloudcomputing.repository.GameRepository;
+import de.tuberlin.cloudcomputing.service.GameService;
 
 @RestController
 @RequestMapping("/api/game")
 public class GameController {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private GameService gameService;
 
-	private GameRepository gameRepo;
-
-	public GameController(GameRepository gameRepo) {
-		this.gameRepo = gameRepo;
+	public GameController(GameService gameService) {
+		this.gameService = gameService;
 	}
 
 	@CrossOrigin
 	@PostMapping(value = "/")
 	public Game newGame(@RequestBody Player player) {
-		Game game = new Game();
-		game.addPlayer(player);
-		gameRepo.save(game);
-		logger.info("game created with id {}", game.getId());
-		return game;
+		return gameService.createGame(player);
 	}
 
 	@CrossOrigin
 	@PostMapping(value = "/{id}/join")
-	public Game joinGame(@RequestBody Player player, @PathVariable String id) {
-		Game game = gameRepo.findOne(id);
-		if (game != null) {
-			game.addPlayer(player);
-			gameRepo.save(game);
-			logger.info("player {} added to game {}", player.getId(), id);
-			if (game.getState().equals(State.RUNNING)) {
-				logger.info("game {} started", id);
-			}
-		}
-		return game;
+	public Game joinGame(@RequestBody Player player, @PathVariable String id) throws Exception {
+		return gameService.joinGame(id, player);
 	}
 
 	@CrossOrigin
 	@GetMapping(value = "/")
 	public Iterable<Game> getGames() {
-		return gameRepo.findAll();
+		return gameService.getAllGames();
 	}
 }

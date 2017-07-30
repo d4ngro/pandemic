@@ -38,11 +38,4 @@ public class Game {
 		players = new ArrayList<Player>();
 		state = State.WAITING;
 	}
-
-	public void addPlayer(Player player) {
-		players.add(player);
-		if (players.size() == 4) {
-			state = State.RUNNING;
-		}
-	}
 }
