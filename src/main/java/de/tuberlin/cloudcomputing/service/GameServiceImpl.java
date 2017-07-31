@@ -48,7 +48,7 @@ public class GameServiceImpl implements GameService {
 		loggerBuffer.append("Added player {} to game {}");
 		if (game.getPlayers().size() == 4) {
 			game.setState(State.RUNNING);
-			loggerBuffer.append(" and startet game");
+			loggerBuffer.append(" and started game");
 		}
 		game = gameRepo.save(game);
 		logger.info(loggerBuffer.toString(), player.getId(), id);
